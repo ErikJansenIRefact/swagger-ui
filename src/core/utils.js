@@ -8,6 +8,7 @@ import some from "lodash/some"
 import eq from "lodash/eq"
 import { memoizedSampleFromSchema, memoizedCreateXMLExample } from "core/plugins/samples/fn"
 import win from "./window"
+import cssEscape from "css.escape"
 
 const DEFAULT_REPONSE_KEY = "default"
 
@@ -650,3 +651,29 @@ export const shallowEqualKeys = (a,b, keys) => {
     return eq(a[key], b[key])
   })
 }
+
+export function getAcceptControllingResponse(responses) {
+  if(!Im.OrderedMap.isOrderedMap(responses)) {
+    // wrong type!
+    return null
+  }
+
+  if(!responses.size) {
+    // responses is empty
+    return null
+  }
+
+  const suitable2xxResponse = responses.find((res, k) => {
+    return k.startsWith("2") && Object.keys(res.get("content") || {}).length > 0
+  })
+
+  // try to find a suitable `default` responses
+  const defaultResponse = responses.get("default") || Im.OrderedMap()
+  const defaultResponseMediaTypes = (defaultResponse.get("content") || Im.OrderedMap()).keySeq().toJS()
+  const suitableDefaultResponse = defaultResponseMediaTypes.length ? defaultResponse : null
+
+  return suitable2xxResponse || suitableDefaultResponse
+}
+
+export const createDeepLinkPath = (str) => typeof str == "string" || str instanceof String ? str.trim().replace(/\s/g, "_") : ""
+export const escapeDeepLinkPath = (str) => cssEscape( createDeepLinkPath(str) )
