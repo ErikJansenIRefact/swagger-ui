@@ -33,10 +33,10 @@ module.exports = function SwaggerUI(opts) {
     url: "",
     urls: null,
     layout: "BaseLayout",
-    docExpansion: "list",
+    docExpansion: "none",
     maxDisplayedTags: null,
-    filter: null,
-    validatorUrl: "https://online.swagger.io/validator",
+    filter: true,
+    validatorUrl: null, //"https://online.swagger.io/validator",
     configs: {},
     custom: {},
     displayOperationId: false,
@@ -46,7 +46,7 @@ module.exports = function SwaggerUI(opts) {
     responseInterceptor: (a => a),
     showMutatedRequest: true,
     defaultModelRendering: "example",
-    defaultModelExpandDepth: 1,
+    defaultModelExpandDepth: 0,
 
     // Initial set of plugins ( TODO rename this, or refactor - we don't need presets _and_ plugins. Its just there for performance.
     // Instead, we can compile the first plugin ( it can be a collection of plugins ), then batch the rest.
