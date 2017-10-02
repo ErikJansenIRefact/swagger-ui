@@ -11,8 +11,7 @@ export default class ParameterRow extends Component {
     isExecute: PropTypes.bool,
     onChangeConsumes: PropTypes.func.isRequired,
     specSelectors: PropTypes.object.isRequired,
-    pathMethod: PropTypes.array.isRequired,
-    getConfigs: PropTypes.func.isRequired
+    pathMethod: PropTypes.array.isRequired
   }
 
   constructor(props, context) {
@@ -57,16 +56,15 @@ export default class ParameterRow extends Component {
   }
 
   render() {
-    let {param, onChange, getComponent, getConfigs, isExecute, fn, onChangeConsumes, specSelectors, pathMethod} = this.props
+    let {param, onChange, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod} = this.props
 
     let { isOAS3 } = specSelectors
 
     // const onChangeWrapper = (value) => onChange(param, value)
     const JsonSchemaForm = getComponent("JsonSchemaForm")
-    const ParamBody = getComponent("ParamBody")
+    const ParamExample = getComponent("ParamExample")
     let inType = param.get("in")
-    let bodyParam = inType !== "body" ? null
-      : <ParamBody getComponent={getComponent}
+    let paramExample = <ParamExample getComponent={getComponent}
                    fn={fn}
                    param={param}
                    consumes={ specSelectors.operationConsumes(pathMethod) }
@@ -108,7 +106,7 @@ export default class ParameterRow extends Component {
           <Markdown source={ param.get("description") }/>
           {(isFormData && !isFormDataSupported) && <div>Error: your browser does not support FormData</div>}
 
-          { bodyParam || !isExecute ? null
+          { paramExample || !isExecute ? null
             : <JsonSchemaForm fn={fn}
                               getComponent={getComponent}
                               value={ value }
@@ -120,12 +118,11 @@ export default class ParameterRow extends Component {
 
 
           {
-            bodyParam && schema ? <ModelExample getComponent={ getComponent }
-                                                getConfigs={ getConfigs }
+            paramExample && schema ? <ModelExample getComponent={ getComponent }
                                                 isExecute={ isExecute }
                                                 specSelectors={ specSelectors }
                                                 schema={ schema }
-                                                example={ bodyParam }/>
+                                                example={ paramExample }/>
               : null
           }
 
