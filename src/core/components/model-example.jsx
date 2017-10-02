@@ -7,14 +7,13 @@ export default class ModelExample extends React.Component {
     specSelectors: PropTypes.object.isRequired,
     schema: PropTypes.object.isRequired,
     example: PropTypes.any.isRequired,
-    isExecute: PropTypes.bool,
-    getConfigs: PropTypes.func.isRequired
+    isExecute: PropTypes.bool
   }
 
   constructor(props, context) {
     super(props, context)
-    let { getConfigs } = this.props
-    let { defaultModelRendering } = getConfigs()
+    //let { getConfigs } = this.props
+    let { defaultModelRendering } = "example" //getConfigs()
     if (defaultModelRendering !== "example" && defaultModelRendering !== "model") {
       defaultModelRendering = "example"
     }
@@ -32,8 +31,8 @@ export default class ModelExample extends React.Component {
   }
 
   render() {
-    let { getComponent, specSelectors, schema, example, isExecute, getConfigs } = this.props
-    let { defaultModelExpandDepth } = getConfigs()
+    let { getComponent, specSelectors, schema, example, isExecute } = this.props
+    let defaultModelExpandDepth  = 1 //getConfigs()
     const ModelWrapper = getComponent("ModelWrapper")
 
     return <div>
